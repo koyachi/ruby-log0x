@@ -16,11 +16,13 @@ worker_common:
 
 # 各ワーカー機能設定
 workers:
-  - class: SampleWorker::Gearman::Hello
-    num: 1
+#  - class: SampleWorker::Gearman::Hello
+#    num: 1
 #  - class: SampleWorker::Q4M::GutenMorgen
+#    num: 1
+#  - cmd: 'echo "hello"'
 #    num: 1
   - class: SampleWorker::Q4M::RuntimeConfig
     num: 1
-#  - cmd: 'echo "hello"'
-#    num: 1
+  - class: SampleWorker::Gearman::RuntimeConfig
+    num: 1

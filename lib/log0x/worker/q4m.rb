@@ -8,8 +8,8 @@ module Log0x
         worker.module_eval do |mod|
           include ::Q4M::Worker
           def initialize(*args)
-            predefined_queue_table = self.class.instance_variable_get(:@queue_tables)
-            @queue_tables = predefined_queue_table if predefined_queue_table
+            predefined_queue_tables = self.class.instance_variable_get(:@queue_tables)
+            @queue_tables = predefined_queue_tables if predefined_queue_tables
             init(args) if methods.include? 'init'
           end
         end
