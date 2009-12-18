@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+#DEBUGGGG
+$:.unshift File.dirname(__FILE__) + '/../lib/'
+
+require 'rubygems'
+require 'log0x'
+
+ARGV.push '-H' if ARGV[0] && ARGV[0] =~ /^[^-]/
+Log0x::CLI.run ARGV

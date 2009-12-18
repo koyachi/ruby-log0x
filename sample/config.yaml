@@ -1,0 +1,24 @@
+paths:
+  - /Users/koyachi/code/ruby/log0x/sample/lib
+  - /home/koyachi/incubator/log0x/sample/lib
+
+# ワーカー共通設定
+worker_common:
+  gearman:
+    servers:
+      - localhost:4730
+#      - localhost:4731
+  q4m:
+    connect_info:
+      dsn: 'DBI:Mysql:database=test'
+      user: 'root'
+      pswd: ''
+
+# 各ワーカー機能設定
+workers:
+  - class: SampleWorker::Gearman::Hello
+    num: 1
+  - class: SampleWorker::Q4M::GutenMorgen
+    num: 1
+#  - cmd: 'echo "hello"'
+#    num: 1
