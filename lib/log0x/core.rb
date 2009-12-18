@@ -72,7 +72,7 @@ module Log0x
       starter = if process_config['class']
         worker_class = load_worker_class(process_config['class'])
         @logger.info "worker class: #{worker_class}"
-        # include Log0x::Workernizeしてるか確認
+        # include Log0x::Workerizeしてるか確認
         if Log0x::BootLoader.supported?(worker_class)
           lambda {Log0x::BootLoader.start worker_class, process_config, @config}
         else

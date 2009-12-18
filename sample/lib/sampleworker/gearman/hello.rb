@@ -2,7 +2,7 @@
 module SampleWorker
   module Gearman
     class Hello
-      include Log0x::Workernize
+      include Log0x::Workerize
       worker_type :gearman => {
         :func => 'addition'
       }

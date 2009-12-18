@@ -4,7 +4,7 @@
 module SampleWorker
   module Q4M
     class GutenMorgen
-      include Log0x::Workernize
+      include Log0x::Workerize
       worker_type :q4m => {
         :queues => 'my_queue',
       }

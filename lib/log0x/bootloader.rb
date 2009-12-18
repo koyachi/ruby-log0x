@@ -21,7 +21,7 @@ module Log0x
 
       # gearmanはベースクラスがあるわけじゃないのでワーカー種別毎に判断する実装がわかれる
       def supported?(worker_class)
-        worker_class.ancestors.include? ::Log0x::Workernize
+        worker_class.ancestors.include? ::Log0x::Workerize
       end
 
       def start(worker_class, process_config, global_config)

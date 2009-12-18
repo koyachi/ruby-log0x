@@ -20,7 +20,7 @@ module Log0x
   end
 
   # ユーザのワーカー実装クラスがインクルードするモジュール
-  module Workernize
+  module Workerize
     def self.included(worker)
       worker.extend ::Log0x::Worker::Common
     end
