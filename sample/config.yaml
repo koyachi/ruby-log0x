@@ -18,7 +18,9 @@ worker_common:
 workers:
   - class: SampleWorker::Gearman::Hello
     num: 1
-  - class: SampleWorker::Q4M::GutenMorgen
+#  - class: SampleWorker::Q4M::GutenMorgen
+#    num: 1
+  - class: SampleWorker::Q4M::RuntimeConfig
     num: 1
 #  - cmd: 'echo "hello"'
 #    num: 1

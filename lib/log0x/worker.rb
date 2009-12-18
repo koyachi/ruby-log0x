@@ -9,10 +9,13 @@ module Log0x
       end
 
       def worker_type(opt=nil)
-        if opt
+        if opt && opt.instance_of?(Hash)
           @worker_type = opt.keys[0]
           @info = opt[@worker_type]
           # @worker_type指定のみで@infoはconfigから読めるようにもしておきたい
+        elsif opt && opt.instance_of?(Symbol)
+          @worker_type = opt
+          @info = nil
         end
         @worker_type
       end

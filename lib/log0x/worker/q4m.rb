@@ -4,11 +4,13 @@ module Log0x
     module Q4M
       def self.extended(worker)
         info = worker.instance_variable_get(:@info)
-        worker.instance_variable_set(:@queue_tables, info[:queues])
+        worker.instance_variable_set(:@queue_tables, (info.instance_of? Hash) ? info[:queues] : nil)
         worker.module_eval do |mod|
           include ::Q4M::Worker
           def initialize(*args)
-            @queue_tables = self.class.instance_variable_get(:@queue_tables)# || ::Log0x.config['worker_common']['q4m']
+            predefined_queue_table = self.class.instance_variable_get(:@queue_tables)
+            @queue_tables = predefined_queue_table if predefined_queue_table
+            init(args) if methods.include? 'init'
           end
         end
       end

@@ -1,4 +1,3 @@
-#require 'worker_starter'
 module SampleWorker
   module Gearman
     class Hello

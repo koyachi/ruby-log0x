@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-#require 'worker_starter'
-
 module SampleWorker
   module Q4M
     class GutenMorgen
