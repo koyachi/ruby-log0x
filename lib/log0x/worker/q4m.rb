@@ -10,6 +10,7 @@ module Log0x
           def initialize(*args)
             predefined_queue_tables = self.class.instance_variable_get(:@queue_tables)
             @queue_tables = predefined_queue_tables if predefined_queue_tables
+            # ここ(か@q.start_worker)でprocess_config渡したい
             init(args) if methods.include? 'init'
           end
         end

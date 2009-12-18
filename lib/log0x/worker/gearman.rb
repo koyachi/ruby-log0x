@@ -16,7 +16,7 @@ module Log0x
       end
 
       def self.start(args)
-        @impl = args['worker_class'].new
+        @impl = args['worker_class'].new args
         @worker = ::Gearman::Worker.new args['worker_common']['gearman']['servers']
         @worker.add_ability(@impl.func_name) do |data, job|
           @impl.work data, job
