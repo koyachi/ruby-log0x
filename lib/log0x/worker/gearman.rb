@@ -15,10 +15,6 @@ module Log0x
         end
       end
 
-      def work(data,job)
-        raise Log0x::WorkerMethodNotImplemented
-      end
-
       def self.start(args)
         @impl = args['worker_class'].new
         @worker = ::Gearman::Worker.new args['worker_common']['gearman']['servers']

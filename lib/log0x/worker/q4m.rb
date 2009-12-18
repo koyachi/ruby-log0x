@@ -15,10 +15,6 @@ module Log0x
         end
       end
 
-      def work(data, job)
-        raise Log0x::WorkerMethodNotImplemented
-      end
-
       def self.start(args)
         @workers = args['worker_class']
         ci = args['worker_common']['q4m']['connect_info']

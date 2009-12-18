@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 module Log0x
-  class WorkerMethodNotImplemented < StandardError ; end
-
   module BootLoader
     class << self
       def workers
