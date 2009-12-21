@@ -7,7 +7,7 @@ module Log0x
         worker.instance_variable_set(:@queue_tables, (info.instance_of? Hash) ? info[:queues] : nil)
         worker.module_eval do |mod|
           include ::Q4M::Worker
-          def initialize(*args)
+          def initialize(args)
             predefined_queue_tables = self.class.instance_variable_get(:@queue_tables)
             @queue_tables = predefined_queue_tables if predefined_queue_tables
             # ここ(か@q.start_worker)でprocess_config渡したい
@@ -23,7 +23,7 @@ module Log0x
         user = ci['user'] || ''
         pswd = ci['pswd'] || ''
         @q = ::Q4M.connect :connect_info => [dsn, user, pswd]
-        @q.start_worker @workers
+        @q.start_worker [@workers], args
       end
     end
   end

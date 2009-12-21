@@ -4,7 +4,7 @@ module SampleWorker
       include Log0x::Workerize
       worker_type :gearman
 
-      def init(*args)
+      def init(args)
         @func_name = 'subtraction'
       end
 

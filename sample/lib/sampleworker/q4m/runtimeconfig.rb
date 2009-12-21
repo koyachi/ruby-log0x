@@ -6,8 +6,8 @@ module SampleWorker
       include Log0x::Workerize
       worker_type :q4m
 
-      def init(*args)
-        @queue_tables = 'my_queue'
+      def init(args)
+        @queue_tables = args['queue_tables']
         p "[#{$$}] SampleWorker::Q4M::RuntimeConfig#init #{@queue_tables}"
       end
 
