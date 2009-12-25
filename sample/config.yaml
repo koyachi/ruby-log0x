@@ -23,8 +23,14 @@ workers:
 #  - cmd: 'echo "hello"'
 #    num: 1
 
-  - class: SampleWorker::Q4M::RuntimeConfig
-    queue_tables: my_queue
+#  - class: SampleWorker::Q4M::RuntimeConfig
+#    queue_tables: my_queue
+#    num: 1
+#  - class: SampleWorker::Gearman::RuntimeConfig
+#    num: 1
+
+  - class: SampleWorker::Gearman::Hello
+    file: sampleworker/my/hello
     num: 1
   - class: SampleWorker::Gearman::RuntimeConfig
     num: 1

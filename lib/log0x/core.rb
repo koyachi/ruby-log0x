@@ -38,11 +38,12 @@ module Log0x
     end
 
     attr_accessor :loaded_workers
-    def load_worker_class(load_cls)
+    def load_worker_class(load_cls, process_config)
       @loaded_workers ||= {}
       return @loaded_workers[load_cls] if @loaded_workers[load_cls]
       clss = load_cls.split('::')
-      require clss.map{|c| c.downcase}.join('/')
+      filepath = (process_config.include? 'file') ? process_config['file'] : clss.map{|c| c.downcase}.join('/')
+      require filepath
       root = Module
       worker_cls = clss.inject(root){|parent,child| parent.const_get child}
       @loaded_workers[load_cls] = worker_cls
@@ -70,7 +71,7 @@ module Log0x
 
     def start_process(process_config)
       starter = if process_config['class']
-        worker_class = load_worker_class(process_config['class'])
+        worker_class = load_worker_class(process_config['class'], process_config)
         @logger.info "worker class: #{worker_class}"
         # include Log0x::Workerizeしてるか確認
         if Log0x::BootLoader.supported?(worker_class)
