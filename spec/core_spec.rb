@@ -173,6 +173,39 @@ describe Log0x do
   end
 
   describe '.start_process' do
+    it 'should save process_config to @active[pid] if forked process is parent' do
+      class DummyLogger
+        def initialzie
+        end
+        def info(msg)
+        end
+        def warn(msg)
+        end
+      end
+      Log0x.logger = DummyLogger.new
+
+      Log0x::BootLoader.should_receive(:supported?).and_return do |worker_class|
+        worker_class.should == 'MyWorker::A(load_worker_class)'
+        true
+      end
+#      Log0x::BootLoader.should_receive(:start).and_return do |worker_class, process_config, global_config|
+#        worker_class.should == 'MyWorker::A'
+#        process_config.should == {'class'=>'MyWorker::A'}
+#        global_config.should == {:hoge => 'fuga'}
+#      end
+
+      Log0x.should_receive(:load_worker_class).and_return do |cls, process_config|
+        cls.should == 'MyWorker::A'
+        'MyWorker::A(load_worker_class)'
+      end
+      Log0x.should_receive(:protect_from_signals).and_return do
+        100
+      end
+
+      Log0x.config = {:hoge => 'fuga'}
+      Log0x.start_process({'class'=>'MyWorker::A'})
+      Log0x.active[100].should == {'class'=>'MyWorker::A'}
+    end
   end
 
   describe '.run' do
