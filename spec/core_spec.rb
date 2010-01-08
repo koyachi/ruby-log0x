@@ -115,6 +115,61 @@ describe Log0x do
   end
 
   describe '.init' do
+    it 'should set members from config' do
+      Log0x.module_eval do |m|
+        class Logger
+          attr_accessor :level
+          def initialize(args)
+          end
+          def info(msg)
+          end
+        end
+      end
+      except_worker_configs = [
+                               {
+                                 'class' => 'MyWorker::A',
+                                 'num' => 2,
+                               },
+                               {
+                                 'class' => 'MyWorker::B',
+                                 'num' => 3,
+                               },
+                              ]
+      Log0x.should_receive(:start_process).exactly(2 + 3).and_return do |process|
+        except_worker_configs.should include(process)
+      end
+
+      Log0x.init({
+                   'paths' => %w[path_a path_b path_c],
+                   'workers' => [
+                                 {
+                                   'class' => 'MyWorker::A',
+                                   'num' => 2,
+                                 },
+                                 {
+                                   'class' => 'MyWorker::B',
+                                   'num' => 3,
+                                 }
+                                ]
+                 })
+      Log0x.config.should == {
+        'paths' => %w[path_a path_b path_c],
+        'workers' => [
+                      {
+                        'class' => 'MyWorker::A',
+                        'num' => 2,
+                      },
+                      {
+                        'class' => 'MyWorker::B',
+                        'num' => 3,
+                      }
+                     ]
+      }
+      %w[path_a path_b path_c].each do |path|
+        $:.should include(path)
+      end
+    end
+
   end
 
   describe '.start_process' do
