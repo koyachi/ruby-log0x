@@ -69,22 +69,43 @@ module Log0x
       end
     end
 
+    class RedirectLogger
+      def initialize(filename)
+        @logger = Logger.new filename, 'weekly'
+      end
+
+      def write(obj)
+        output = (obj.to_s =~ /\n\z/) ? obj.to_s.chomp : obj.to_s
+        @logger.info output
+      end
+
+      def self.enable_log(file_id, dir='./')
+        $stdout = self.new File.expand_path(File.join(dir, "log0x_stdout_#{file_id}.log"))
+        $stderr = self.new File.expand_path(File.join(dir, "log0x_stderr_#{file_id}.log"))
+      end
+    end
+
     def start_process(process_config)
       starter = if process_config['class']
         worker_class = load_worker_class(process_config['class'], process_config)
         @logger.info "worker class: #{worker_class}"
         # include Log0x::Workerizeしてるか確認
         if Log0x::BootLoader.supported?(worker_class)
-          lambda {Log0x::BootLoader.start worker_class, process_config, @config}
+          lambda do
+            cls = worker_class.to_s.split('::').join('-')
+            RedirectLogger.enable_log cls, @config['log']
+            Log0x::BootLoader.start worker_class, process_config, @config
+          end
         else
           @logger.warn "#{worker_class} is not supported."
           nil
         end
       elsif process_config['cmd']
-        lambda {
+        lambda do
+          RedirectLogger.enable_log process_config['cmd'].split(/\s/).join('-'), @config['log']
           exec process_config['cmd']
           exit
-        }
+        end
       else
         # error?
         @logger.warn "unkown worker info(not class/cmd)"

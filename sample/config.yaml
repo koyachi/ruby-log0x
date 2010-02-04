@@ -1,6 +1,7 @@
 paths:
   - /Users/koyachi/code/ruby/log0x/sample/lib
   - /home/koyachi/incubator/log0x/sample/lib
+log: /home/koyachi/tmp
 
 # ワーカー共通設定
 worker_common:
