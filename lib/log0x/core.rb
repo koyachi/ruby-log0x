@@ -75,7 +75,8 @@ module Log0x
       end
 
       def write(obj)
-        output = (obj.to_s =~ /\n\z/) ? obj.to_s.chomp : obj.to_s
+        output = (obj.to_s =~ /\n\Z/) ? obj.to_s.chomp : obj.to_s
+        return if output == ''
         @logger.info output
       end
 
