@@ -22,7 +22,8 @@ module Log0x
           result = Process.kill 'INT', pid
           @logger.info "Process.kill result = #{result}"
         rescue Exception => e
-          @logger.warn "ERROR(Process.kill) #{e.inspect}"
+          @logger.warn "ERROR(Process.kill[#{pid}]) #{e.inspect}"
+          Process.kill 'KILL', pid
         end
       end
       exit
