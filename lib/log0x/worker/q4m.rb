@@ -22,8 +22,13 @@ module Log0x
         dsn = ci['dsn'] || ''
         user = ci['user'] || ''
         pswd = ci['pswd'] || ''
-        @q = ::Q4M.connect :connect_info => [dsn, user, pswd]
-        @q.start_worker [@workers], args
+        begin
+          @q = ::Q4M.connect :connect_info => [dsn, user, pswd]
+          @q.start_worker [@workers], args
+        rescue DBI::DatabaseError => e
+          Log0x.logger.warn e
+          exit
+        end
       end
     end
   end
