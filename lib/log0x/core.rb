@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+require 'timeout'
 module Log0x
   class << self
     def protect_from_signals
@@ -15,14 +16,31 @@ module Log0x
 
     def _huntsman
       Signal.trap :CHLD, 'IGNORE'
-      @logger.info Log0x.active
+      @logger.info "log0x._huntsman #{Log0x.active.inspect}"
+      pss = `ps aux | grep ruby`.split("\n").map{|l| l.split(/\s/).grep(/[^\s]/)[1].to_i}.sort
+      @logger.info "RUBY PROCESSES = #{pss.inspect}"
       Log0x.active.keys.each do |pid| 
+        @logger.info "pid = #{pid}"
+        next unless pss.include? pid
         begin
           Process.detach pid
           result = Process.kill 'INT', pid
-          @logger.info "Process.kill result = #{result}"
+          child_pid = nil
+          begin
+            Timeout.timeout(10){ child_pid = Process.waitpid pid }
+            @logger.info "Process.kill[#{pid}] result = #{result}, waitpid = #{child_pid}"
+          rescue Timeout::Error
+            child_pid = Process.waitpid pid, Process::WNOHANG
+            Process.kill 'KILL', pid
+            @logger.info "Process.kill(-KILL)[#{pid}] result = #{result}, waitpid = #{child_pid}"
+          end
+        rescue Errno::ECHILD => e
+          @logger.warn "Errno::ECHILD(Process.kill[#{pid}]) #{e.inspect}"
+        rescue Errno::ESRCH => e
+          @logger.warn "Errno::ESRCH(Process.kill[#{pid}]) #{e.inspect}"
         rescue Exception => e
           @logger.warn "ERROR(Process.kill[#{pid}]) #{e.inspect}"
+          Process.detach pid
           Process.kill 'KILL', pid
         end
       end
