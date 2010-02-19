@@ -5,6 +5,7 @@ require 'thread'
 require 'logger'
 require 'q4m'
 require 'gearman'
+require 'optparse'
 
 module Log0x
   VERSION = '0.0.1'
