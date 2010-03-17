@@ -47,11 +47,6 @@ module Log0x
       exit
     end
 
-    def _hup
-      Signal.trap :CHLD, 'IGNORE'
-      Log0x.active.keys.each {|pid| Process.kill 'HUP', pid}
-    end
-
     def add_worker_loadpath(path)
       $:.unshift path
     end
@@ -151,7 +146,7 @@ module Log0x
     def run(config)
       Signal.trap(:INT) {self._huntsman}
       Signal.trap(:TERM) {self._huntsman}
-      Signal.trap(:HUP) {self._hup}
+      Signal.trap(:HUP) {self._huntsman}
       self.init config
 
       loop do
